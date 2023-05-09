@@ -1,0 +1,101 @@
+import random
+
+# Character generation function
+def generate_character(characteristics_list, weaknesses_list):
+
+    #CHARCTERISTICS
+    characteristics = random.choice(characteristics_list)
+    if isinstance(characteristics, list):
+        characteristics = ", ".join(characteristics)
+
+    #WEAKNESS
+    weaknesses = random.choice(weaknesses_list)
+    if isinstance(weaknesses, list):
+        weaknesses = ", ".join(weaknesses)
+    
+    return {"characteristics": characteristics, "weaknesses": weaknesses}
+
+# Generate character
+while True:
+
+  # Ask user whether to generate a hero or villain
+  while True:
+    choice = input("Do you want to generate a hero or a villain? (h/v): ")
+    if choice.lower() == "h":
+        character_characteristics = hero_characteristics
+        character_weaknesses = hero_weaknesses
+        break
+    elif choice.lower() == "v":
+        character_characteristics = villain_characteristics
+        character_weaknesses = villain_weaknesses
+        break
+    else:
+        print("Invalid choice. Please enter 'h' or 'v'.")
+
+  # Ask user for name
+  fname = input("Enter first name: ")
+  lname = input("Enter last name: ")
+  if fname == "" and lname == "":
+    name = f"Anonymous"
+  elif fname == "":
+    name = f"{lname}"
+  elif lname == "":
+    name = f"{fname}"
+  else:
+    name = f"{fname} {lname}"
+
+  # Ask user for species
+  species = input("Enter species (Demon, Human, Asgardan, Cyborg, Vampire, Frost Giant): ")
+  # Check if species is valid
+  valid_species = ["Demon", "Human", "Asgardan", "Cyborg", "Vampire", "Frost Giant"]
+  while species == "" or species not in valid_species:
+      print("Invalid species. Please enter one of the following: ", ", ".join(valid_species))
+      species = input("Enter species (Demon, Human, Asgardan, Cyborg, Vampire, Frost Giant): ")
+
+  # Generate character characteristics and weaknesses
+  character = generate_character(character_characteristics, character_weaknesses)
+
+  # Print character information
+  if choice.lower() == "h":
+      print(f"Hero \nName: {name}\nSpecies: {species}\nCharacteristics: {character['characteristics']}\nWeaknesses: {character['weaknesses']}")
+
+  else:
+      print(f"Villain \nName: {name}\nSpecies: {species}\nCharacteristics: {character['characteristics']}\nWeaknesses: {character['weaknesses']}")
+
+  # Ask if user wants to keep the character
+  keep_character = input("Do you want to keep this character? (y/n): ")
+  if keep_character.lower() == "y":
+      # Ask user to enter an original story
+      story = input("Enter your original story: ")
+      while True:
+        if len(story.split()) > 250:
+          print("Error: story must be no more than 250 words.")
+          continue
+        else:
+          # Append story to character information
+            character_info = f"Hero \nName: {fname} {lname}\nSpecies: {species}\nCharacteristics: {character['characteristics']}\nWeaknesses: {character['weaknesses']}, \nStory:{story}"
+          # Save character to file
+            with open("characters.txt", "a") as file:
+              file.write(character_info)
+            print("Your story and character have been saved.")
+            break
+  elif keep_character.lower() == "n":
+    choice = input("Do you want to try again or quit? (t/q): ")
+    if choice.lower() == "t":
+      continue
+    elif choice.lower() == "q":
+      print("Thank you for using this program!")
+      break
+    else:
+      print("Invalid choice. Please enter 't' or 'q'.")
+  else:
+    print("Invalid choice. Please enter 'y' or 'n'.")
+
+  end = input("Do you want continue or quit? (c/q): ")
+  if end.lower() == "c":
+    continue
+  elif end.lower() == "q":
+    print("Thank you for using this program!")
+    break
+  else:
+    print("Invalid choice. Please enter 'c' or 'q'.") 
